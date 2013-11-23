@@ -1,7 +1,7 @@
 ##
-##  Gompertz exponential growth model
+##  Stannard growth model
 ##
-##  Created by Daniel Rodríguez Pérez on 27/7/2013.
+##  Created by Daniel Rodríguez Pérez on 28/8/2013.
 ##
 ##  Copyright (c) 2013 Daniel Rodríguez Pérez.
 ##
@@ -19,43 +19,44 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>
 ##
 
-#' Gompertz growth model
+#' Stannard growth model
 #'
-#' Computes the Gompertz growth model and its inverse
-#' \deqn{ y(t) = \alpha exp(-\beta exp(-k^t))}{ y(t) = \alpha * exp(-\beta * exp(-k^t))}
+#' Computes the Stannard growth model
+#' \deqn{ y(t) = \alpha \left[ 1 + exp(-(\beta + k t)/m) \right]^{-m}}{ y(t) = \alpha *( 1 + exp(-(beta + k * t)/m))^(-m) }
 #' 
 #' @param t time
 #' @param x size
 #' @param alpha upper asymptote
 #' @param beta growth displacement
 #' @param k growth rate 
+#' @param m slope of growth 
 #' 
-#' @usage gompertz(t, alpha, beta, k)
+#' @usage stannard(t, alpha, beta, k, m)
 #' 
 #' @examples
-#' growth <- gompertz(0:10, 10, 0.5, 0.3)
+#' growth <- stannard(0:10, 1, .2, .1, .5)
 #' 
 #' @references
-#' D. Fekedulegn, M. Mac Siurtain, and J. Colbert, "Parameter estimation of
-#' nonlinear growth models in forestry," Silva Fennica, vol. 33, no. 4, pp.
-#' 327-336, 1999.
+#' A. Khamiz, Z. Ismail, and A. T. Muhammad, "Nonlinear growth models for
+#' modeling oil palm yield growth," Journal of Mathematics and Statistics,
+#' vol. 1, no. 3, p. 225, 2005.
 #' 
-#' @rdname gompertz
-#' @export gompertz
-#' @aliases gompertz
-gompertz <- function(t, alpha, beta, k) {
-  result <- alpha * exp(-beta * exp(-k * t));
+#' @rdname stannard
+#' @export stannard
+#' @aliases stannard
+stannard <- function(t, alpha, beta, k, m) {
+  result <- alpha * ( 1 + exp(-(beta + k * t)/m) )^(-m)
   return(result)
 }
 
 #' @examples
 #' # Calculate inverse function
-#' time <- gompertz.inverse(growth, 10, 0.5, 0.3)
+#' time <- stannard.inverse(growth, 1, .2, .1, .5)
 #' 
-#' @rdname gompertz
-#' @export gompertz.inverse
-#' @aliases gompertz.inverse
-gompertz.inverse <- function(x, alpha, beta, k) {
-  result <- - log(-log(x / alpha) / beta) / k
+#' @rdname stannard
+#' @export stannard.inverse
+#' @aliases stannard.inverse
+stannard.inverse <- function(x, alpha, beta, k, m) {
+  result <- - (beta + m * log((alpha / x)^(1 / m) - 1)) / k
   return(result)
 }

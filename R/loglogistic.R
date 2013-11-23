@@ -1,7 +1,7 @@
 ##
-##  Mitcherlich exponential growth model
+##  Log-logistic growth model
 ##
-##  Created by Daniel Rodríguez Pérez on 27/7/2013.
+##  Created by Daniel Rodríguez Pérez on 28/8/2013.
 ##
 ##  Copyright (c) 2013 Daniel Rodríguez Pérez.
 ##
@@ -19,10 +19,10 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>
 ##
 
-#' Mitcherlich growth model
+#' Log-logistic growth model
 #'
-#' Computes the Mitcherlich growth model
-#' \deqn{ y(t) = (\alpha - \beta k^t)}{ y(t) = \alpha - \beta * k^t}
+#' Computes the Log-logistic growth model
+#' \deqn{ y(t) = \frac{\alpha}{1 + \beta exp(-k log(t)}}{ y(t) = \alpha/(1 + \beta * exp(-k * log(t))}
 #' 
 #' @param t time
 #' @param x size
@@ -30,32 +30,34 @@
 #' @param beta growth range 
 #' @param k growth rate 
 #' 
-#' @usage mitcherlich(t, alpha, beta, k)
+#' @usage loglogistic(t, alpha, beta, k)
 #' 
 #' @examples
-#' growth <- mitcherlich(0:10, 10, 0.5, 0.3)
+#' growth <- loglogistic(0:10, 10, 0.5, 0.3)
 #' 
 #' @references
-#' D. Fekedulegn, M. Mac Siurtain, and J. Colbert, "Parameter estimation of
-#' nonlinear growth models in forestry," Silva Fennica, vol. 33, no. 4, pp.
-#' 327-336, 1999.
+#' A. Khamiz, Z. Ismail, and A. T. Muhammad, "Nonlinear growth models for
+#' modeling oil palm yield growth," Journal of Mathematics and Statistics,
+#' vol. 1, no. 3, p. 225, 2005.
 #' 
-#' @rdname mitcherlich
-#' @export mitcherlich
-#' @aliases mitcherlich
-mitcherlich <- function(t, alpha, beta, k) {
-  result <- alpha - beta * k^t
+#' @rdname loglogistic
+#' @export loglogistic
+#' @aliases loglogistic
+loglogistic <- function(t, alpha, beta, k) {
+  t[t < 0] <- NaN
+  result   <- logistic(log(t), alpha, beta, k)
   return(result)
 }
 
 #' @examples
 #' # Calculate inverse function
-#' time <- mitcherlich.inverse(growth, 10, 0.5, 0.3)
+#' time <- loglogistic.inverse(growth, 10, 0.5, 0.3)
 #' 
-#' @rdname mitcherlich
-#' @export mitcherlich.inverse
-#' @aliases mitcherlich.inverse
-mitcherlich.inverse <- function(x, alpha, beta, k) {
-  result <- log((alpha - x) / beta) / log(k)
+#' @rdname loglogistic
+#' @export loglogistic.inverse
+#' @aliases loglogistic.inverse
+loglogistic.inverse <- function(x, alpha, beta, k) {
+  result <- exp(logistic.inverse(x, alpha, beta, k))
   return(result)
 }
+

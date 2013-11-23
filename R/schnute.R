@@ -1,7 +1,7 @@
 ##
-##  Gompertz exponential growth model
+##  Schnute growth model
 ##
-##  Created by Daniel Rodríguez Pérez on 27/7/2013.
+##  Created by Daniel Rodríguez Pérez on 28/8/2013.
 ##
 ##  Copyright (c) 2013 Daniel Rodríguez Pérez.
 ##
@@ -19,43 +19,44 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>
 ##
 
-#' Gompertz growth model
+#' Schnute growth model
 #'
-#' Computes the Gompertz growth model and its inverse
-#' \deqn{ y(t) = \alpha exp(-\beta exp(-k^t))}{ y(t) = \alpha * exp(-\beta * exp(-k^t))}
+#' Computes the Schnute growth model
+#' \deqn{ y(t) =  \left[ r_0 + \beta exp(k t) \right]^m }{ y(t) = (r_0 + \beta * exp(k * t))^m }
 #' 
 #' @param t time
 #' @param x size
-#' @param alpha upper asymptote
+#' @param r0 reference value
 #' @param beta growth displacement
 #' @param k growth rate 
+#' @param m slope of growth 
 #' 
-#' @usage gompertz(t, alpha, beta, k)
+#' @usage schnute(t, r0, beta, k, m)
 #' 
 #' @examples
-#' growth <- gompertz(0:10, 10, 0.5, 0.3)
+#' growth <- schnute(0:10, 10, 5, .5, .5)
 #' 
 #' @references
-#' D. Fekedulegn, M. Mac Siurtain, and J. Colbert, "Parameter estimation of
-#' nonlinear growth models in forestry," Silva Fennica, vol. 33, no. 4, pp.
-#' 327-336, 1999.
+#' A. Khamiz, Z. Ismail, and A. T. Muhammad, "Nonlinear growth models for
+#' modeling oil palm yield growth," Journal of Mathematics and Statistics,
+#' vol. 1, no. 3, p. 225, 2005.
 #' 
-#' @rdname gompertz
-#' @export gompertz
-#' @aliases gompertz
-gompertz <- function(t, alpha, beta, k) {
-  result <- alpha * exp(-beta * exp(-k * t));
+#' @rdname schnute
+#' @export schnute
+#' @aliases schnute
+schnute <- function(t, r0, beta, k, m) {
+  result <- (r0 + beta * exp(k * t))^m
   return(result)
 }
 
 #' @examples
 #' # Calculate inverse function
-#' time <- gompertz.inverse(growth, 10, 0.5, 0.3)
+#' time <- schnute.inverse(growth, 10, 5, .5, .5)
 #' 
-#' @rdname gompertz
-#' @export gompertz.inverse
-#' @aliases gompertz.inverse
-gompertz.inverse <- function(x, alpha, beta, k) {
-  result <- - log(-log(x / alpha) / beta) / k
+#' @rdname schnute
+#' @export schnute.inverse
+#' @aliases schnute.inverse
+schnute.inverse <- function(x, r0, beta, k, m) {
+  result <- log((x^(1 / m) - r0) / beta) / k
   return(result)
 }
