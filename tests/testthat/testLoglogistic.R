@@ -30,7 +30,7 @@ test_that("Log-logistic growth model invalid values", {
   result <- loglogistic(time, parameters[1], parameters[2], parameters[3])
   
   for (i in 1:length(time)) {
-    expect_that(is.na(result[i]), is_true())
+    expect_true(is.na(result[i]))
   }
 })
 

@@ -31,7 +31,7 @@ test_that("Richard growth model invalid values", {
                     parameters[4])
   
   for (i in 1:length(time)) {
-    expect_that(is.na(result[i]), is_true())
+    expect_true(is.na(result[i]))
   }
 })
 
